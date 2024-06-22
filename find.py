@@ -87,6 +87,7 @@ def switch_to_window(title):
 ################################################ --------- Main ####################################################
 
 def main(characters_set):
+    print(f"Fight Turn detection for the characters {characters_set}")
     try:
         while True:
             screen_image = capture_top_left_screen_region()
@@ -97,7 +98,7 @@ def main(characters_set):
                 if character.lower() in extracted_text.lower():
                     switch_to_window(character)
                     time.sleep(1)
-                    continue
+                    break
 
             # Wait for 0.3 second before capturing the next screen
             time.sleep(0.3)
