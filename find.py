@@ -59,10 +59,8 @@ def capture_top_left_screen_region():
 def process_image(image):
     # Convert the image to grayscale
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
-
     # Apply thresholding to preprocess the image
     _, binary_img = cv2.threshold(gray, 150, 255, cv2.THRESH_BINARY)
-
     # Perform OCR
     text = pytesseract.image_to_string(binary_img)
     return text
@@ -91,13 +89,12 @@ def main(characters_set):
     try:
         while True:
             screen_image = capture_top_left_screen_region()
-            #save_image(screen_image, "captured_window.png")
             extracted_text = process_image(screen_image)
-
+            
             for character in characters_set:
                 if character.lower() in extracted_text.lower():
                     switch_to_window(character)
-                    time.sleep(1)
+                    time.sleep(2)
                     break
 
             # Wait for 0.3 second before capturing the next screen
