@@ -11,7 +11,7 @@ permissions:
 jobs:
   deploy:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v4
@@ -26,9 +26,9 @@ jobs:
     - name: Build package to .exe
       run: pyinstaller --onefile find.py
     - name: List files in dist directory
-      run: ls -l dist
+      run: dir dist
     - name: Upload .exe as artifact
       uses: actions/upload-artifact@v3
       with:
         name: dofus-combat-multi-compte-v${{ github.event.release.tag_name }}
-        path: /home/runner/work/dofus-combat-multi-compte/dofus-combat-multi-compte/dist/find.exe
+        path: dist/find.exe
