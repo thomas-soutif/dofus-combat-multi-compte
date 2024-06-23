@@ -25,3 +25,8 @@ jobs:
         pip install pyinstaller
     - name: Build package to .exe
       run: pyinstaller --onefile find.py
+    - name: Upload .exe as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dofus-combat-multi-compte-v${{ github.event.release.tag_name }}
+        path: dist/find.exe
