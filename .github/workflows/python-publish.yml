@@ -29,4 +29,4 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: dofus-combat-multi-compte-v${{ github.event.release.tag_name }}
-        path: /home/runner/work/dofus-combat-multi-compte/dofus-combat-multi-compte/dist/find
+        path: /home/runner/work/dofus-combat-multi-compte/dofus-combat-multi-compte/dist/find.exe
