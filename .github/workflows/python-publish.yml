@@ -24,7 +24,7 @@ jobs:
         python -m pip install --upgrade pip
         pip install pyinstaller
     - name: Build package to .exe
-      run: pyinstaller --onefile find.py && ls /home/runner/work/dofus-combat-multi-compte/dofus-combat-multi-compte/dist/find
+      run: pyinstaller --onefile find.py && ls -al /home/runner/work/dofus-combat-multi-compte/dofus-combat-multi-compte/dist/find/*
     - name: Upload .exe as artifact
       uses: actions/upload-artifact@v3
       with:
