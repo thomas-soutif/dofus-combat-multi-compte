@@ -30,22 +30,12 @@ pip install -r requirements.txt
 ## Usage
 
 ```bash
-python find.py [your list of words separate by space]
+python find.py [your list of characters to detect]
 #For example
-python find.py Search Youtube 
+python find.py Floup-Iop Old-Man 
 ```
 
-In the example, it will so looking for the word Search, and Youtube , then the program will exit when finding.
-
-### Choose the part of the screen
-
-By default, it will look only on the top left of the screen, but if you want to choose that, you can modify the line
-
-```python
-screen_image = capture_top_left_screen_region()
-```
-
-in the ```main()``` function.
+In the example, it will so looking for the characters Floup-Io, and Old-Man , then the program will exit when finding.
 
 ## Compile the program to .exe
 

@@ -1,0 +1,35 @@
+# This workflow will create the .exe application to be used as a standalone.
+name: Upload Python .EXE
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: read
+
+jobs:
+  deploy:
+
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: Set up Python
+      uses: actions/setup-python@v3
+      with:
+        python-version: '3.x'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pyinstaller
+    - name: Build package to .exe
+      run: pyinstaller --onefile find.py
+    - name: List files in dist directory
+      run: dir dist
+    - name: Upload .exe as artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: dofus-combat-multi-compte-v${{ github.event.release.tag_name }}
+        path: dist/find.exe
