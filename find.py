@@ -1,11 +1,10 @@
 import cv2
 import pytesseract
-from PIL import Image
 import numpy as np
 import mss
 import time
 import argparse
-import pyautogui
+import win32gui
 
 def get_screen_resolution():
     with mss.mss() as sct:
@@ -65,41 +64,44 @@ def process_image(image):
     text = pytesseract.image_to_string(binary_img)
     return text
 
+
+# Callback function to retrieve window titles
+def get_window_titles(hwnd, windows):
+    if win32gui.IsWindowVisible(hwnd):
+        windows.append((hwnd, win32gui.GetWindowText(hwnd)))
+
 # Function to save the image to a file
 def save_image(image, filename):
-    cv2.imwrite(filename, image)
+    win32gui.cv2_imwrite(filename, image)
 
 
-def switch_to_window(title):
+def switch_to_window(character):
     try:
-        for window_title in pyautogui.getAllTitles():
-            if title in window_title:
-                (pyautogui.getWindowsWithTitle(window_title)[0]).activate()
-                print(f"Switching to the windows {window_title}")
+        windows = []
+        # Enumerate through all windows and retrieve their titles
+        win32gui.EnumWindows(get_window_titles, windows)
+        for hwnd, title in windows:
+            if character in title:
+                win32gui.SetForegroundWindow(hwnd)
                 return
-
+        return
+        
     except Exception as e:
-        print(f"Error switching to window '{title}': {e}")
+        print(f"Error switching to the window character of '{character}': {e}")
         return
 
 ################################################ --------- Main ####################################################
 
 def main(characters_set):
     print(f"Fight Turn detection for the characters {characters_set}")
-    try:
+    try:    
         while True:
             screen_image = capture_top_left_screen_region()
             extracted_text = process_image(screen_image)
-            
             for character in characters_set:
                 if character.lower() in extracted_text.lower():
                     switch_to_window(character)
-                    time.sleep(2)
-                    break
-
-            # Wait for 0.3 second before capturing the next screen
-            time.sleep(0.3)
-
+                    break            
     except KeyboardInterrupt:
         print("\nProgram terminated by user.")
 

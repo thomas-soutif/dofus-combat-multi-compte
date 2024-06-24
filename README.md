@@ -15,7 +15,7 @@ For Linux, you can install the package ```tesseract-ocr``` depend on your distri
 
 ```bash
 python -m venv venv
-.\venv\Script\activate.bat
+venv\Scripts\activate.bat
 pip install -r requirements.txt
 ```
 

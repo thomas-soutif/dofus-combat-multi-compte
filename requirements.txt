@@ -1,6 +1,5 @@
 mss
 numpy
-opencv-python
-pillow
 pytesseract
-pyautogui
+opencv-python
+pywin32
