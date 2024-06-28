@@ -36,7 +36,7 @@ def capture_screen_region(left, top, width, height):
         img = np.array(screenshot)
         return img
 
-def capture_top_left_screen_region():
+def capture_top_left_screen_region(height_bar):
     scale_factor=0.3
     # Get the screen resolution
     screen_width, screen_height = get_screen_resolution()
@@ -45,7 +45,7 @@ def capture_top_left_screen_region():
     region_width = int(screen_width * scale_factor)
     region_height = int(screen_height * scale_factor)
     region_left = 0  # Leftmost side
-    region_top = 0  # Topmost side
+    region_top = height_bar  # Topmost side (height size of the windows title)
 
     # Capture the region using mss
     with mss.mss() as sct:
@@ -64,6 +64,28 @@ def process_image(image):
     text = pytesseract.image_to_string(binary_img)
     return text
 
+def get_title_bar_height(characters_set):
+    # Get the handle of a dofus character
+    windows = []
+    hwnd_find = None
+    
+    win32gui.EnumWindows(get_window_titles, windows)
+    for character in characters_set:
+        if hwnd_find:
+            break
+        for hwnd, title in windows:
+            if character in title and "Dofus" in title:
+                hwnd_find = hwnd
+                break
+    
+    if not hwnd_find:
+        return 20 #default
+    
+    hwnd = hwnd_find
+    window_rect = win32gui.GetWindowRect(hwnd)
+    client_rect = win32gui.GetClientRect(hwnd)
+    title_bar_height = (window_rect[3] - window_rect[1]) - (client_rect[3] - client_rect[1])
+    return title_bar_height
 
 # Callback function to retrieve window titles
 def get_window_titles(hwnd, windows):
@@ -81,7 +103,7 @@ def switch_to_window(character):
         # Enumerate through all windows and retrieve their titles
         win32gui.EnumWindows(get_window_titles, windows)
         for hwnd, title in windows:
-            if character in title:
+            if character in title and "Dofus" in title:
                 win32gui.SetForegroundWindow(hwnd)
                 return
         return
@@ -94,9 +116,10 @@ def switch_to_window(character):
 
 def main(characters_set):
     print(f"Fight Turn detection for the characters {characters_set}")
+    height_bar = get_title_bar_height(characters_set)
     try:    
         while True:
-            screen_image = capture_top_left_screen_region()
+            screen_image = capture_top_left_screen_region(height_bar)
             extracted_text = process_image(screen_image)
             for character in characters_set:
                 if character.lower() in extracted_text.lower():
