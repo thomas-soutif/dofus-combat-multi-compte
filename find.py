@@ -112,6 +112,12 @@ def switch_to_window(character):
         print(f"Error switching to the window character of '{character}': {e}")
         return
 
+
+def is_dofus_window_focused():
+    hwnd = win32gui.GetForegroundWindow()
+    window_title = win32gui.GetWindowText(hwnd).lower()
+    return any(keyword in window_title for keyword in ["dofus", "ocre companion"])
+
 ################################################ --------- Main ####################################################
 
 def main(characters_set):
@@ -119,10 +125,19 @@ def main(characters_set):
     height_bar = get_title_bar_height(characters_set)
     try:    
         while True:
+            if not is_dofus_window_focused():
+                time.sleep(1)
+                continue
             screen_image = capture_top_left_screen_region(height_bar)
             extracted_text = process_image(screen_image)
+            
+            lines = extracted_text.lower().split('\n')
+            if not any(line.strip().startswith("niveau") for line in lines):
+                continue
+            
             for character in characters_set:
-                if character.lower() in extracted_text.lower():
+                extracted_text = extracted_text.lower()
+                if character.lower() in extracted_text:
                     switch_to_window(character)
                     break            
     except KeyboardInterrupt:
