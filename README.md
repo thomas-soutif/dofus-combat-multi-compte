@@ -45,3 +45,7 @@ pyinstaller --onefile find.py
 ```
 
 Be aware that the file will be around 60 mo.
+
+## Download the program from Github action (Automatic build when I make a release)
+Here, you have the program already compile in .exe : https://github.com/thomas-soutif/dofus-combat-multi-compte/actions
+You just need to choose the version you want, and download from the "artifact" section
