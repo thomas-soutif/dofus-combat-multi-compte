@@ -44,12 +44,9 @@ def switch_to_window(character):
         return
 
 
-def is_dofus_window_focused():
+def is_dofus_window_focused(characters_set):
     hwnd = win32gui.GetForegroundWindow()
-    window_title = win32gui.GetWindowText(hwnd).lower()
-    return any(keyword in window_title for keyword in ["dofus", "ocre companion"])
-
-
-# Function to save the image to a file
-def save_image(image, filename):
-    win32gui.cv2_imwrite(filename, image)
+    window_title = win32gui.GetWindowText(hwnd)
+    if "Ocre Companion" in window_title:
+        return True
+    return any(keyword in window_title for keyword in characters_set) and any(keyword in window_title for keyword in ["Dofus"])

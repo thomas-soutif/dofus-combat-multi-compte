@@ -1,3 +1,4 @@
+import cv2
 import numpy as np
 import mss
 
@@ -48,3 +49,15 @@ def capture_top_left_screen_region(height_bar):
         screenshot = sct.grab(region)
         img = np.array(screenshot)
         return img
+
+
+def capture_around_position(x, y, region_width, region_height):
+    # Calculate the region to capture
+    left = max(0, x - region_width // 2)
+    top = max(0, y - region_height // 2)
+    
+    return capture_screen_region(left, top, region_width, region_height)
+
+# Function to save the image to a file
+def save_image(image, filename):
+    cv2.imwrite(filename, image)
